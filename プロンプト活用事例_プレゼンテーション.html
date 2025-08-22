@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロンプト作成のためのポイント - 実践ガイド</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #2c3e50;
+            --light-bg: #ecf0f1;
+            --white: #ffffff;
+            --gray: #7f8c8d;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .presentation-container {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: var(--white);
+            padding: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* タイトルスライド */
+        .title-slide {
+            text-align: center;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+        }
+
+        .title-slide h1 {
+            font-size: 3.2em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .title-slide .date {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* 通常スライド */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+            border-bottom: 4px solid var(--secondary-color);
+            padding-bottom: 20px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin: 30px 0 20px 0;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        /* テキスト */
+        p {
+            font-size: 1.3em;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 40px;
+        }
+
+        li {
+            margin: 15px 0;
+            font-size: 1.3em;
+            line-height: 1.7;
+        }
+
+        /* コードブロック */
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+            font-size: 1.1em;
+            line-height: 1.6;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            color: var(--text-color);
+        }
+
+        /* 強調 */
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .highlight-box {
+            background: var(--light-bg);
+            border-left: 5px solid var(--secondary-color);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 1.2em;
+            line-height: 1.7;
+        }
+
+        /* カード */
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .card.success {
+            border-left: 5px solid var(--success);
+        }
+
+        .card.warning {
+            border-left: 5px solid var(--warning);
+        }
+
+        .card.danger {
+            border-left: 5px solid var(--accent-color);
+        }
+
+        /* 比較レイアウト */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .comparison-item {
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .before {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: var(--white);
+        }
+
+        .after {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: var(--primary-color);
+        }
+
+        .before h3, .after h3 {
+            margin-top: 0;
+        }
+
+        /* 画像 */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin: 30px 0;
+            border: 3px solid var(--light-bg);
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .image-caption {
+            font-size: 1.1em;
+            color: var(--gray);
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* ナビゲーション（非表示） */
+        .nav-controls {
+            display: none;
+        }
+
+        /* プログレスバー */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        /* スライド番号 */
+        .slide-number {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--white);
+            padding: 12px 24px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            color: var(--text-color);
+            z-index: 1000;
+        }
+
+        /* PC専用設計のためレスポンシブコードを削除 */
+
+        /* 特殊要素 */
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            color: var(--white);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .feature-item {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .summary-box h2 {
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .url-link {
+            font-size: 1.1em;
+            color: var(--secondary-color);
+            text-decoration: underline;
+            margin: 20px 0;
+            display: block;
+        }
+
+        /* リンクをクリック可能にする */
+        a {
+            color: var(--secondary-color);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        a:hover {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <!-- プログレスバー -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <!-- スライド番号 -->
+    <div class="slide-number" id="slideNumber">1 / 24</div>
+
+    <!-- プレゼンテーションコンテナ -->
+    <div class="presentation-container">
+        
+        <!-- スライド1: タイトル -->
+        <div class="slide active title-slide">
+            <h1>プロンプト作成のための<br>ポイント</h1>
+        </div>
+
+        <!-- スライド2: プロンプトエンジニアリングとは？ -->
+        <div class="slide">
+            <h1>プロンプトエンジニアリングとは？</h1>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3>AIへの指示の最適化技術</h3>
+                    <p>同じAIでも、指示の仕方で出力品質が大きく変わる</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>業務効率化の鍵</h3>
+                    <p>適切なプロンプトで作業時間を大幅に短縮</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📈</div>
+                    <h3>必須スキル</h3>
+                    <p>AI時代に求められる重要な技術スキル</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- スライド3: 自治体業務における課題と解決 -->
+        <div class="slide">
+            <h1>自治体業務における課題と解決</h1>
+            <div class="comparison">
+                <div class="comparison-item before">
+                    <h3>⚠️ 現状の課題</h3>
+                    <ul>
+                        <li>定型文書作成の時間的負担</li>
+                        <li>担当者による対応品質のばらつき</li>
+                        <li>議事録等の活用不足</li>
+                    </ul>
+                </div>
+                <div class="comparison-item after">
+                    <h3>✅ AIプロンプトによる解決</h3>
+                    <ul>
+                        <li><strong>作業時間を削減</strong></li>
+                        <li><strong>対応品質の標準化</strong></li>
+                        <li><strong>情報資産の有効活用</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- スライド4: 効果的なプロンプトの5要素（詳細版） -->
+        <div class="slide">
+            <h1>効果的なプロンプトの5要素（詳細版）</h1>
+            <pre><code>あなたは[役割・専門家]です。 ← <span class="highlight">要素1: 役割設定</span>
+私は[依頼者の立場や目的]です。 ← <span class="highlight">要素2: 文脈設定</span>
+以下の条件を守って出力してください。
+
+## 出力条件
+1. 目的： [最終的に達成したいことを明記] ← <span class="highlight">要素3: 目的</span>
+2. 形式： [箇条書き / 表形式 / 文章形式など] ← <span class="highlight">要素4: 形式</span>
+3. 文体： [簡潔でわかりやすい / 専門的で正確など] ← <span class="highlight">要素5: 文体</span>
+4. 制約： [字数制限 / 難しい用語には注釈を入れるなど]
+5. 出力の質： 
+   - 論理的で一貫性があること
+   - 冗長さを避け、要点を押さえること
+   - 必要なら例や比喩を入れてわかりやすくする</code></pre>
+        </div>
+
+        <!-- スライド5: フレームワークのメリット -->
+        <div class="slide">
+            <h1>このフレームワークのメリット</h1>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <h3>再現性が高い</h3>
+                    <p>誰でも同じ品質の出力を得られる</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>カスタマイズが容易</h3>
+                    <p>業務に応じて条件を調整可能</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h3>品質管理が可能</h3>
+                    <p>出力条件で品質基準を明確化</p>
+                </div>
+            </div>
+            <div class="summary-box">
+                <h2>💡 重要ポイント</h2>
+                <p>このフレームワークにより、AIを使った業務効率化を<br>
+                <strong>体系的・継続的・高品質</strong>に実現できます</p>
+            </div>
+        </div>
+
+        <!-- スライド22: 基本プロンプト -->
+        <div class="slide">
+            <h1>基本プロンプト</h1>
+            <pre><code>あなたは[役割・専門家]です。  
+私は[依頼者の立場や目的]です。  
+以下の条件を守って出力してください。
+
+## 出力条件
+1. 目的： [最終的に達成したいことを明記]  
+2. 形式： [例：箇条書き / 表形式 / 文章形式 / Markdown形式など]  
+3. 文体： [例：簡潔でわかりやすい / 専門的で正確 / 丁寧で親しみやすい]  
+4. 制約： [字数制限 / 難しい用語には注釈を入れる / 根拠を提示する など]  
+5. 出力の質： 
+   - 論理的で一貫性があること  
+   - 冗長さを避け、要点を押さえること  
+   - 必要なら例や比喩を入れてわかりやすくする  
+
+## 入力
+[ここに依頼内容やデータを記載]  
+
+## 出力
+[ここに「求める出力」を明示、例：レポートを作成してください]</code></pre>
+        </div>
+
+        <!-- スライド23: プロンプト自体をChatGPTに作成してもらう -->
+        <div class="slide">
+            <h1>プロンプト自体をChatGPTに作成してもらう</h1>
+            <pre><code>地方自治体の職員としてメールを返信したいです。 
+
+[メール本文]
+
+このプロンプトをもっとよくして。</code></pre>
+        </div>
+
+        <!-- スライド24: 出力例 -->
+        <div class="slide">
+            <h1>出力例</h1>
+            <pre><code>あなたは地方自治体の職員です。市民から届いたメールに対して、以下の条件で返信文を作成してください。
+
+【条件】
+1. 冒頭で市民の連絡・問い合わせに対する感謝を述べる。
+2. 市民の要望や質問内容を簡潔に要約して触れる。
+3. 必要に応じて現状の状況や対応方針を丁寧に説明する。
+4. 文体は誠実で丁寧、かつ公的機関らしいトーンにする。
+5. 1文は60文字程度を目安にし、読みやすくする。
+6. 最後に連絡先や追加問い合わせへの案内を記載する。
+
+【出力形式】
+- 件名
+- 本文（改行・段落あり）</code></pre>
+        </div>
+
+        <!-- スライド21: メール返信文面作成 -->
+        <div class="slide">
+            <h1>メール返信文面作成</h1>
+        </div>
+
+        <!-- スライド22: 市民からのメールサンプル -->
+        <div class="slide">
+            <h1>市民からのメールサンプル</h1>
+            <pre><code>お疲れさまです。
+今年の夏祭りでたこ焼き屋台やりたいんですが、まだ申し込み間に合いますか？
+料金とか手続きとか教えてください。
+よろしくお願いします。
+山田</code></pre>
+        </div>
+
+        <!-- スライド23: 返信文面作成プロンプト1 -->
+        <div class="slide">
+            <h1>返信文面作成プロンプト1</h1>
+            <pre><code>このメールの返信を作成してください。
+
+お疲れさまです。
+今年の夏祭りでたこ焼き屋台やりたいんですが、まだ申し込み間に合いますか？
+料金とか手続きとか教えてください。
+よろしくお願いします。
+山田</code></pre>
+        </div>
+
+        <!-- スライド24: Chatgpt出力例1 -->
+        <div class="slide">
+            <h1>Chatgpt出力例1</h1>
+            <pre><code>山田様
+
+お疲れさまです。
+ご連絡ありがとうございます。
+
+今年の夏祭りへの屋台出店について、まだ申し込みは間に合います。
+たこ焼き屋台も歓迎です！
+
+出店に関する概要は以下の通りです：
+
+出店料：○○円（電源使用の場合は＋○○円）
+
+申込締切：○月○日（なるべく早めにご連絡いただけると助かります）
+
+必要書類：出店申込書、食品衛生に関する確認書など（添付いたします）
+
+搬入・設営時間：当日○時〜○時の間
+
+詳細をまとめた資料を添付いたしますので、ご確認ください。
+ご不明な点がありましたら、お気軽にご連絡ください。
+
+よろしくお願いいたします。
+
+[あなたの名前]
+[所属や連絡先など]</code></pre>
+        </div>
+
+        <!-- スライド21: 返信文面作成プロンプト2 -->
+        <div class="slide">
+            <h1>返信文面作成プロンプト2</h1>
+            <pre><code>あなたは地方自治体の職員です。  
+市民から届いたメールに対して、誠実かつ丁寧で、公的機関らしい返信文を作成してください。  
+
+【条件】  
+- 冒頭で感謝を述べること  
+- 市民の要望や問い合わせ内容を要約して触れること  
+- 必要に応じて現状の説明や対応方針を簡潔に示すこと  
+- すぐに対応できない場合は、その理由や今後の見通しを伝えること  
+- 結びで市民への感謝と協力をお願いする姿勢を示すこと  
+- 全体を敬語でまとめ、簡潔でわかりやすい文にすること  
+
+【入力】  
+お疲れさまです。
+今年の夏祭りでたこ焼き屋台やりたいんですが、まだ申し込み間に合いますか？
+料金とか手続きとか教えてください。
+よろしくお願いします。
+山田
+
+【出力例】  
+件名：市道の補修に関するご要望について  
+本文： …（敬語での返信文）…</code></pre>
+        </div>
+
+        <!-- スライド22: Chatgpt出力例2 -->
+        <div class="slide">
+            <h1>Chatgpt出力例2</h1>
+            <pre><code>山田様
+
+このたびは、夏祭りへのご関心をお寄せいただき、誠にありがとうございます。
+
+今回のお問い合わせは、今年の夏祭りにおいて、たこ焼きの屋台を出店されたいとのご希望と、申込期限や手続き、料金等についてのご照会と拝見いたしました。
+
+現在、夏祭りの屋台出店については、出店者の募集期間中であり、**〇月〇日（〇）まで**お申し込みを受け付けております。申込方法や出店料等の詳細につきましては、当市ホームページ「イベント情報」欄に掲載しておりますほか、必要に応じて書類一式を郵送またはメールにてお送りすることも可能です。
+
+なお、出店内容によっては、食品衛生に関する届出や消防法上の確認等が必要となる場合がございますので、お早めのご準備をお願いいたします。
+
+ご不明な点がございましたら、担当課までお気軽にご連絡ください。
+
+今後とも市の行事運営にご理解とご協力を賜りますよう、よろしくお願い申し上げます。
+
+──
+〇〇市〇〇課（担当：□□）
+電話：XXX-XXXX-XXXX
+メール：<a href="mailto:XXXX@city.xxx.jp">XXXX@city.xxx.jp</a></code></pre>
+        </div>
+
+        <!-- スライド23: ファイルアップロードを利用した例 -->
+        <div class="slide">
+            <h1>ファイルアップロードを利用した例</h1>
+        </div>
+
+        <!-- スライド24: 議会議事録から市民向けのFAQを作成 -->
+        <div class="slide">
+            <h1>議会議事録から市民向けのFAQを作成</h1>
+            <h2>令和７年３月都留市社会厚生常任委員会議事録</h2>
+            <a href="https://ssp.kaigiroku.net/tenant/tsuru/SpMinuteView.html?tenant_id=138&council_id=267&schedule_id=1" target="_blank" class="url-link">https://ssp.kaigiroku.net/tenant/tsuru/SpMinuteView.html?tenant_id=138&council_id=267&schedule_id=1</a>
+        </div>
+
+        <!-- スライド21: プロンプト例（議事録FAQ） -->
+        <div class="slide">
+            <h1>プロンプト例</h1>
+            <pre><code>あなたは自治体の広報担当ライターです。  
+私は市民向けに子育てに関するFAQを作る担当者です。  
+
+## 出力条件
+1. 目的：議事録で言及されている子育てに関する発言から質問と回答にまとめる  
+2. 形式：Q&A形式（Markdown見出しつき）  
+3. 文体：親しみやすく、誰でもわかる言葉で  
+4. 制約：1つの質問は100文字以内、回答は200文字以内  
+5. 出力の質：質問が具体的で、市民目線になっていること  
+
+## 入力
+議事録データ（抜粋）：〜  
+
+## 出力
+市民向けFAQを作成してください。</code></pre>
+        </div>
+
+        <!-- スライド22: chatgptに議事録ファイルをアップロードして、出力した例 -->
+        <div class="slide">
+            <h1>chatgptに議事録ファイルをアップロードして、出力した例</h1>
+            <div class="image-container">
+                <img src="image.png" alt="議事録FAQ作成結果">
+            </div>
+        </div>
+
+        <!-- スライド23: 議会議事録から各担当課のTODOリストを作成 -->
+        <div class="slide">
+            <h1>議会議事録から各担当課のTODOリストを作成</h1>
+            <h2>令和７年３月都留市社会厚生常任委員会議事録</h2>
+            <a href="https://ssp.kaigiroku.net/tenant/tsuru/SpMinuteView.html?tenant_id=138&council_id=267&schedule_id=1" target="_blank" class="url-link">https://ssp.kaigiroku.net/tenant/tsuru/SpMinuteView.html?tenant_id=138&council_id=267&schedule_id=1</a>
+        </div>
+
+        <!-- スライド24: 議事録TODO抽出プロンプト -->
+        <div class="slide">
+            <h1>議事録TODO抽出プロンプト</h1>
+            <pre><code>あなたは自治体の会議録を整理する事務局職員です。  
+以下の議事録データから、**各担当課の持ち帰り課題（TODOリスト）**を抽出してください。  
+
+## 出力条件
+1. 出力形式はMarkdown  
+2. 「課」ごとに見出し（###）をつけて整理する  
+3. 各課の下に「- 箇条書き」でTODOを記載する  
+4. 抽出対象は以下に該当するもの：  
+   - 委員や市民からの要望に対して「確認する」「検討する」と答えた事項  
+   - 「対応を依頼された」事項  
+   - 「現状不明」「把握していない」と答えた事項  
+5. 文体は簡潔に「〜を確認」「〜を検討」「〜を報告」の形で統一する  
+6. 不明確な点は「内容不明（要確認）」として残す  
+7. 各TODOは1文で表現する  
+
+## 出力例
+### ⚪︎⚪︎課
+- 〜〜〜を確認する
+
+### ⚪︎⚪︎課
+- 〜〜〜を報告する  
+
+---
+
+## 入力
+議事録データ（本文）
+
+## 出力
+各担当課ごとのTODOリスト</code></pre>
+        </div>
+
+        <!-- スライド21: chatgptに議事録ファイルをアップロードして、出力した例 -->
+        <div class="slide">
+            <h1>chatgptに議事録ファイルをアップロードして、出力した例</h1>
+            <div class="image-container">
+                <img src="image-1.png" alt="議事録TODO抽出結果">
+            </div>
+        </div>
+
+        <!-- スライド22: レシート画像から、経費内訳作成 -->
+        <div class="slide">
+            <h1>レシート画像から、経費内訳作成</h1>
+            <div class="image-container">
+                <img src="image-2.png" alt="レシート画像">
+            </div>
+        </div>
+
+        <!-- スライド23: プロンプト例（レシート） -->
+        <div class="slide">
+            <h1>プロンプト例</h1>
+            <pre><code>あなたは経理担当者です。  
+私は経費精算のためにレシートから内訳を作成する担当者です。
+以下のレシート画像を確認し、経費内訳を作成してください。
+
+## 出力条件
+1. 出力形式はMarkdown
+2. レシートに記載されている日付、店舗名、品目、金額を表形式で整理する
+3. 各項目は以下の列を含むこと
+   - 日付
+   - 店舗名
+   - 品目
+   - 金額
+4. 金額は全て数値として扱い、合計金額も算出する
+5. 不明な項目は「不明」と記載する
+6. 表の最後に「合計金額」を記載する
+
+## 入力
+レシート画像（アップロードされた画像ファイル）
+
+## 出力
+| 日付       | 店舗名     | 品目         | 金額   |
+|------------|------------|--------------|--------|
+| 2023/10/01 | スーパーA  | 食品         | 1200円 |
+| 2023/10/02 | コンビニB  | 飲料         | 300円   |
+| 2023/10/03 | レストランC | 食事         | 2500円 |
+| 合計金額   |            | |              | 4000円 |</code></pre>
+        </div>
+
+        <!-- スライド24: 出力例 -->
+        <div class="slide">
+            <h1>出力例</h1>
+            <div class="image-container">
+                <img src="image-3.png" alt="レシート処理結果">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ナビゲーションコントロール -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← 前へ</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">次へ →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            // 範囲チェック
+            if (n >= totalSlides) currentSlide = 0;
+            if (n < 0) currentSlide = totalSlides - 1;
+
+            // すべてのスライドを非表示
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // 現在のスライドを表示
+            slides[currentSlide].classList.add('active');
+
+            // プログレスバー更新
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // スライド番号更新
+            document.getElementById('slideNumber').textContent = 
+                `${currentSlide + 1} / ${totalSlides}`;
+
+            // ボタンの有効/無効切り替え
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+
+        // キーボードナビゲーション
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < totalSlides - 1) changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentSlide > 0) changeSlide(-1);
+            } else if (e.key === 'Home') {
+                currentSlide = 0;
+                showSlide(currentSlide);
+            } else if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                showSlide(currentSlide);
+            }
+        });
+
+        // タッチ/スワイプサポート
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // 左スワイプ（次へ）
+                if (currentSlide < totalSlides - 1) changeSlide(1);
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // 右スワイプ（前へ）
+                if (currentSlide > 0) changeSlide(-1);
+            }
+        }
+
+        // 初期化
+        showSlide(0);
+
+        // クリックでのページ送り機能を削除
+    </script>
+</body>
+</html>

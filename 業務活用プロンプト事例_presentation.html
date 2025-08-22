@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成AIプロンプト活用で業務効率化を実現</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00d9ff;
+            --secondary-color: #ff00ff;
+            --bg-color: #0a0e27;
+            --slide-bg: linear-gradient(135deg, #0a0e27 0%, #151931 100%);
+            --text-color: #e0e6ed;
+            --heading-color: #ffffff;
+            --accent-gradient: linear-gradient(90deg, #00d9ff, #ff00ff);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(0, 217, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* スライドコンテナ */
+        .presentation-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            padding: 60px;
+            background: var(--slide-bg);
+            position: relative;
+            overflow-y: auto;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* タイトルスライド */
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #151931 100%);
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 30px rgba(255, 0, 255, 0.5)); }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+        }
+
+        /* 通常スライド */
+        h1, h2 {
+            color: var(--heading-color);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        /* リスト */
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 15px 0;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        li strong {
+            color: var(--primary-color);
+        }
+
+        /* コードブロック */
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.9em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        code {
+            color: #00ff88;
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+
+        /* テーブル */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* カード */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 217, 255, 0.2);
+        }
+
+        /* グリッドレイアウト */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        /* ハイライト */
+        .highlight {
+            background: linear-gradient(90deg, rgba(0, 217, 255, 0.2), rgba(255, 0, 255, 0.2));
+            padding: 3px 8px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        /* アジェンダリスト */
+        .agenda-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .agenda-list li {
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+            font-size: 1.3em;
+        }
+
+        .agenda-list li:hover {
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        /* ナビゲーション */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* プログレスバー */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.7);
+        }
+
+        /* スライド番号 */
+        .slide-number {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            z-index: 1000;
+            font-size: 1em;
+        }
+
+        /* フルスクリーンボタン */
+        .fullscreen-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+            }
+
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .nav-controls {
+                bottom: 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 画像 */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin: 20px 0;
+        }
+
+        /* 比較セクション */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .comparison-item {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .comparison-item.before {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .comparison-item.after {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid rgba(0, 255, 0, 0.3);
+        }
+
+        /* エフェクトテキスト */
+        .effect-text {
+            font-size: 1.2em;
+            color: var(--primary-color);
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            margin: 20px 0;
+        }
+
+        /* チェックリスト */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li:before {
+            content: "✓ ";
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- プログレスバー -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <!-- スライド番号 -->
+    <div class="slide-number" id="slideNumber">1 / 12</div>
+
+    <!-- フルスクリーンボタン -->
+    <button class="fullscreen-btn" onclick="toggleFullscreen()">全画面</button>
+
+    <!-- プレゼンテーションコンテナ -->
+    <div class="presentation-container">
+        
+        <!-- スライド1: タイトル -->
+        <div class="slide active title-slide">
+            <h1>生成AIプロンプト活用で<br>業務効率化を実現</h1>
+            <p class="subtitle">〜自治体における実践事例と導入ガイド〜</p>
+            <div class="effect-text">Press SPACE or → to start</div>
+        </div>
+
+        <!-- スライド2: アジェンダ -->
+        <div class="slide">
+            <h1>📊 本日のアジェンダ</h1>
+            <ol class="agenda-list">
+                <li>なぜ今、プロンプトエンジニアリングが重要か</li>
+                <li>プロンプト作成の基本フレームワーク</li>
+                <li>実践事例①：メール対応の効率化</li>
+                <li>実践事例②：議事録の有効活用</li>
+                <li>実践事例③：画像処理の自動化</li>
+                <li>プロンプト改善のプロテクニック</li>
+                <li>まとめと今後の展開</li>
+            </ol>
+        </div>
+
+        <!-- スライド3: なぜ重要か -->
+        <div class="slide">
+            <h1>なぜ今、プロンプトエンジニアリングが重要か</h1>
+            <div class="grid">
+                <div class="card">
+                    <h2>🎯 プロンプトエンジニアリングとは？</h2>
+                    <ul>
+                        <li><strong>AIへの指示の最適化技術</strong></li>
+                        <li>同じAIでも、指示の仕方で出力品質が大きく変わる</li>
+                        <li>業務効率化の鍵となるスキル</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2>💡 自治体業務の課題と解決</h2>
+                    <h3>現状の課題</h3>
+                    <ul>
+                        <li>定型文書作成の時間的負担</li>
+                        <li>担当者による対応品質のばらつき</li>
+                    </ul>
+                    <h3>AIプロンプトによる解決</h3>
+                    <ul>
+                        <li><strong>作業時間を削減</strong></li>
+                        <li><strong>対応品質の標準化</strong></li>
+                        <li><strong>情報資産の有効活用</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- スライド4: 基本フレームワーク -->
+        <div class="slide">
+            <h1>プロンプト作成の基本フレームワーク</h1>
+            <h2>📝 効果的なプロンプトの5要素</h2>
+            <pre><code>あなたは[役割・専門家]です。 ← <span class="highlight">要素1: 役割設定</span>
+私は[依頼者の立場や目的]です。 ← <span class="highlight">要素2: 文脈設定</span>
+以下の条件を守って出力してください。
+
+## 出力条件
+1. 目的： [最終的に達成したいことを明記] ← <span class="highlight">要素3: 目的</span>
+2. 形式： [箇条書き / 表形式 / 文章形式など] ← <span class="highlight">要素4: 形式</span>
+3. 文体： [簡潔でわかりやすい / 専門的で正確など] ← <span class="highlight">要素5: 文体</span>
+4. 制約： [字数制限 / 難しい用語には注釈を入れるなど]
+5. 出力の質： 
+   - 論理的で一貫性があること
+   - 冗長さを避け、要点を押さえること</code></pre>
+            <div class="card">
+                <h3>✅ このフレームワークのメリット</h3>
+                <ul class="checklist">
+                    <li><strong>再現性が高い</strong>：誰でも同じ品質の出力を得られる</li>
+                    <li><strong>カスタマイズが容易</strong>：業務に応じて条件を調整可能</li>
+                    <li><strong>品質管理が可能</strong>：出力条件で品質基準を明確化</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド5: メール対応事例 -->
+        <div class="slide">
+            <h1>実践事例①：メール対応の効率化</h1>
+            <h2>📧 市民からのメール対応を自動化</h2>
+            <div class="comparison">
+                <div class="comparison-item before">
+                    <h3>❌ 改善前：シンプルなプロンプト</h3>
+                    <pre><code>このメールの返信を作成してください。
+[メール本文]</code></pre>
+                    <p><strong>問題点</strong>：文体が不統一、必要情報の欠落、公的機関らしさの不足</p>
+                </div>
+                <div class="comparison-item after">
+                    <h3>✅ 改善後：構造化されたプロンプト</h3>
+                    <pre><code>あなたは地方自治体の職員です。
+市民から届いたメールに対して、
+誠実かつ丁寧で、公的機関らしい
+返信文を作成してください。
+
+【条件】
+- 冒頭で感謝を述べること
+- 要望内容を要約して触れること
+- 現状の説明や対応方針を示すこと
+- 敬語でまとめること</code></pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📊 導入効果</h3>
+                <ul>
+                    <li><strong>返信作成時間</strong>：15分 → 3分（80%削減）</li>
+                    <li><strong>品質の標準化</strong>：新人職員でもベテラン並みの文面作成可能</li>
+                    <li><strong>ミスの削減</strong>：必要情報の記載漏れがゼロに</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド6: 議事録活用事例 -->
+        <div class="slide">
+            <h1>実践事例②：議事録の有効活用</h1>
+            <h2>📚 議事録から価値ある情報を抽出</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>活用例1：市民向けFAQの自動生成</h3>
+                    <pre><code>あなたは自治体の広報担当ライターです。
+議事録から子育てに関するFAQを作成してください。
+
+## 出力条件
+1. Q&A形式（Markdown見出しつき）
+2. 親しみやすく、誰でもわかる言葉で
+3. 1つの質問は100文字以内
+4. 回答は200文字以内</code></pre>
+                </div>
+                <div class="card">
+                    <h3>活用例2：各担当課のTODOリスト自動作成</h3>
+                    <pre><code>議事録から各担当課の持ち帰り課題を抽出してください。
+
+## 抽出対象
+- 「確認する」「検討する」と答えた事項
+- 「対応を依頼された」事項
+- 「現状不明」「把握していない」と答えた事項</code></pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3>💡 活用のポイント</h3>
+                <ul>
+                    <li><strong>議事録の死蔵を防ぐ</strong>：膨大な議事録から必要情報を瞬時に抽出</li>
+                    <li><strong>業務の見える化</strong>：課題や宿題事項を自動的にリスト化</li>
+                    <li><strong>市民サービスの向上</strong>：議事録から市民向け情報を自動生成</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド7: 議事録実績 -->
+        <div class="slide">
+            <h1>議事録活用の実績</h1>
+            <h2>📈 令和7年3月都留市社会厚生常任委員会議事録から</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>FAQ自動生成の出力結果</h3>
+                    <img src="image.png" alt="ChatGPTに議事録ファイルをアップロードして出力した例">
+                    <p class="effect-text">FAQ 15項目を5分で作成（手作業なら2時間）</p>
+                </div>
+                <div class="card">
+                    <h3>TODO抽出の出力結果</h3>
+                    <img src="image-1.png" alt="ChatGPTに議事録ファイルをアップロードして出力した例">
+                    <p class="effect-text">TODO 23項目を自動抽出（見落としゼロ）</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- スライド8: 画像処理事例 -->
+        <div class="slide">
+            <h1>実践事例③：画像処理の自動化</h1>
+            <h2>🖼️ レシート画像から経費内訳を自動作成</h2>
+            <div class="card">
+                <h3>プロンプト例</h3>
+                <pre><code>あなたは経理担当者です。
+レシート画像を確認し、経費内訳を作成してください。
+
+## 出力条件
+1. 出力形式はMarkdown
+2. 日付、店舗名、品目、金額を表形式で整理
+3. 金額は全て数値として扱い、合計金額も算出
+4. 不明な項目は「不明」と記載</code></pre>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>入力：レシート画像</h3>
+                    <img src="image-2.png" alt="レシート画像の例">
+                </div>
+                <div class="card">
+                    <h3>出力：自動生成された経費内訳表</h3>
+                    <img src="image-3.png" alt="ChatGPTによるレシート読み取り結果">
+                </div>
+            </div>
+            <div class="card">
+                <h3>🚀 導入メリット</h3>
+                <ul class="checklist">
+                    <li><strong>入力作業の削減</strong>：手入力不要で転記ミスゼロ</li>
+                    <li><strong>処理時間の短縮</strong>：10枚のレシートを3分で処理</li>
+                    <li><strong>統一フォーマット</strong>：誰が処理しても同じ形式</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド9: プロンプト改善 -->
+        <div class="slide">
+            <h1>プロンプト改善のプロテクニック</h1>
+            <h2>🔧 AIにプロンプト自体を改善してもらう</h2>
+            <div class="comparison">
+                <div class="comparison-item before">
+                    <h3>改善依頼の例</h3>
+                    <pre><code>地方自治体の職員としてメールを返信したいです。
+
+[メール本文]
+
+このプロンプトをもっとよくして。</code></pre>
+                </div>
+                <div class="comparison-item after">
+                    <h3>AIが提案する改善版</h3>
+                    <pre><code>あなたは地方自治体の職員です。
+市民から届いたメールに対して、
+以下の条件で返信文を作成してください。
+
+【条件】
+1. 冒頭で感謝を述べる
+2. 要望内容を簡潔に要約
+3. 現状の説明や対応方針を説明
+4. 誠実で丁寧なトーン
+5. 1文は60文字程度
+6. 連絡先や追加問い合わせへの案内</code></pre>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📊 改善のポイント</h3>
+                <ol>
+                    <li><strong>具体性を高める</strong>：曖昧な指示を具体的な条件に分解</li>
+                    <li><strong>構造化する</strong>：情報を階層的に整理</li>
+                    <li><strong>出力形式を明確化</strong>：期待する結果を具体的に示す</li>
+                    <li><strong>制約条件を追加</strong>：文字数、文体、必須要素を明記</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- スライド10: まとめ -->
+        <div class="slide">
+            <h1>本日のまとめ</h1>
+            <div class="grid">
+                <div class="card">
+                    <h2>✅ プロンプトエンジニアリングの重要性</h2>
+                    <ul>
+                        <li>AIの性能を最大限引き出すための必須スキル</li>
+                        <li>業務効率化の実現に直結</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2>✅ 基本フレームワークの活用</h2>
+                    <ul>
+                        <li>5要素（役割・目的・形式・文体・制約）を押さえる</li>
+                        <li>再現性と品質管理を重視</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2>✅ 実践事例から学ぶポイント</h2>
+                    <ol>
+                        <li><strong>メール対応</strong>：80%の時間削減と品質標準化</li>
+                        <li><strong>議事録活用</strong>：情報資産の有効活用</li>
+                        <li><strong>画像処理</strong>：手作業の自動化でミスゼロ</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- スライド11: ネクストステップ -->
+        <div class="slide">
+            <h1>🚀 ネクストステップ</h1>
+            <div class="grid">
+                <div class="card">
+                    <h3>短期的取り組み（1-3ヶ月）</h3>
+                    <ul class="checklist">
+                        <li>各課でプロンプトテンプレートの作成</li>
+                        <li>職員向け研修会の実施</li>
+                        <li>パイロット導入部署の選定</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>中期的展開（3-6ヶ月）</h3>
+                    <ul class="checklist">
+                        <li>全庁的なプロンプトライブラリの構築</li>
+                        <li>業務別ベストプラクティスの共有</li>
+                        <li>効果測定とフィードバック収集</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>長期的ビジョン（6ヶ月以降）</h3>
+                    <ul class="checklist">
+                        <li>AI活用ガイドラインの策定</li>
+                        <li>他自治体との知見共有</li>
+                        <li>市民サービスへの本格展開</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📞 お問い合わせ</h3>
+                <p><strong>プロンプトエンジニアリング導入支援デスク</strong></p>
+                <ul>
+                    <li>メール：ai-support@city.example.jp</li>
+                    <li>内線：XXXX</li>
+                    <li>相談時間：平日9:00-17:00</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド12: 終了 -->
+        <div class="slide title-slide">
+            <h1>ご清聴ありがとうございました</h1>
+            <p class="subtitle">〜生成AIで、より良い市民サービスを〜</p>
+            <div class="card" style="margin-top: 50px;">
+                <h3>📚 参考資料</h3>
+                <ul>
+                    <li>OpenAI プロンプトエンジニアリングガイド</li>
+                    <li>自治体DX推進ポータル</li>
+                    <li>業務別プロンプトテンプレート集（内部資料）</li>
+                </ul>
+                <h3 style="margin-top: 20px;">関連ツール</h3>
+                <ul>
+                    <li>ChatGPT</li>
+                    <li>Claude</li>
+                    <li>Microsoft Copilot</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ナビゲーションコントロール -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← 前へ</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">次へ →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            // 範囲チェック
+            if (n >= totalSlides) currentSlide = 0;
+            if (n < 0) currentSlide = totalSlides - 1;
+
+            // すべてのスライドを非表示
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // 現在のスライドを表示
+            slides[currentSlide].classList.add('active');
+
+            // プログレスバー更新
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // スライド番号更新
+            document.getElementById('slideNumber').textContent = 
+                `${currentSlide + 1} / ${totalSlides}`;
+
+            // ボタンの有効/無効切り替え
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+
+        // キーボードナビゲーション
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key === 'Home') {
+                currentSlide = 0;
+                showSlide(currentSlide);
+            } else if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                showSlide(currentSlide);
+            } else if (e.key === 'Escape') {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // タッチ/スワイプサポート
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);  // 左スワイプ
+            if (touchEndX > touchStartX + 50) changeSlide(-1); // 右スワイプ
+        }
+
+        // フルスクリーン切り替え
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // 初期化
+        showSlide(0);
+
+        // プレゼンターモード（Pキー）
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'p' || e.key === 'P') {
+                // 現在のスライドの内容をコンソールに表示（プレゼンターノート代わり）
+                const currentSlideContent = slides[currentSlide].textContent;
+                console.log('=== Slide ' + (currentSlide + 1) + ' ===');
+                console.log(currentSlideContent);
+            }
+        });
+
+        // マウスホイールでのナビゲーション（オプション）
+        let scrollTimeout;
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    changeSlide(1);
+                } else {
+                    changeSlide(-1);
+                }
+            }, 50);
+        }, { passive: false });
+    </script>
+</body>
+</html>
