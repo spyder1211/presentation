@@ -151,16 +151,51 @@
         }
 
         /* コードブロック - Atlassian Design (Extra Large Sizes) */
+        .code-container {
+            position: relative;
+            margin: 24px 0;
+        }
+
         pre {
             background: #F4F5F7;
             border: 1px solid var(--neutral);
             border-radius: 6px;
             padding: 24px;
-            margin: 24px 0;
+            margin: 0;
             overflow-x: auto;
             font-size: 1.125rem;
             line-height: 1.7;
             box-shadow: var(--elevation-shadow);
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--white);
+            border: 1px solid var(--neutral);
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: var(--elevation-shadow);
+        }
+
+        .copy-button:hover {
+            background: var(--light-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .copy-button.copied {
+            background: var(--success);
+            border-color: var(--success);
+            color: var(--white);
         }
 
         code {
@@ -468,9 +503,9 @@
             </div>
         </div>
 
-        <!-- スライド4: 効果的なプロンプトの5要素（詳細版） -->
+        <!-- スライド4: 効果的なプロンプトの5要素 -->
         <div class="slide">
-            <h1>効果的なプロンプトの5要素（詳細版）</h1>
+            <h1>効果的なプロンプトの5要素</h1>
             <pre><code>あなたは[役割・専門家]です。 ← <span class="highlight">要素1: 役割設定</span>
 私は[依頼者の立場や目的]です。 ← <span class="highlight">要素2: 文脈設定</span>
 以下の条件を守って出力してください。
@@ -592,9 +627,9 @@
 山田</code></pre>
         </div>
 
-        <!-- スライド24: Chatgpt出力例1 -->
+        <!-- スライド24: ChatGPT出力例1 -->
         <div class="slide">
-            <h1>Chatgpt出力例1</h1>
+            <h1>ChatGPT出力例1</h1>
             <pre><code>山田様
 
 お疲れさまです。
@@ -648,9 +683,9 @@
 本文： …（敬語での返信文）…</code></pre>
         </div>
 
-        <!-- スライド22: Chatgpt出力例2 -->
+        <!-- スライド22: ChatGPT出力例2 -->
         <div class="slide">
-            <h1>Chatgpt出力例2</h1>
+            <h1>ChatGPT出力例2</h1>
             <pre><code>山田様
 
 このたびは、夏祭りへのご関心をお寄せいただき、誠にありがとうございます。
@@ -671,9 +706,40 @@
 メール：<a href="mailto:XXXX@city.xxx.jp">XXXX@city.xxx.jp</a></code></pre>
         </div>
 
-        <!-- スライド23: ファイルアップロードを利用した例 -->
+        <!-- スライド15: ファイルアップロードを利用した実践事例 -->
         <div class="slide">
-            <h1>ファイルアップロードを利用した例</h1>
+            <h1>ファイルアップロードを利用した実践事例</h1>
+            <h2><i class="fas fa-upload"></i> 議事録データの活用で業務効率を飛躍的に向上</h2>
+            
+            <div class="feature-grid">
+                <div class="card success">
+                    <div class="feature-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>事例1: 市民向けFAQ自動生成</h3>
+                    <ul>
+                        <li><strong>課題</strong>：議事録から市民が知りたい情報の抽出</li>
+                        <li><strong>解決</strong>：Q&A形式で自動整理</li>
+                        <li><strong>効果</strong>：手作業2時間 → 5分で完了</li>
+                    </ul>
+                </div>
+                
+                <div class="card warning">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>事例2: 担当課TODO自動抽出</h3>
+                    <ul>
+                        <li><strong>課題</strong>：議事録から宿題事項の見落とし防止</li>
+                        <li><strong>解決</strong>：課別TODOリストを自動作成</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3><i class="fas fa-lightbulb"></i> ポイント</h3>
+                <p>議事録ファイルをアップロードするだけで、<strong>眠っている情報資産を即座に活用可能な形に変換</strong>できます。</p>
+            </div>
         </div>
 
         <!-- スライド24: 議会議事録から市民向けのFAQを作成 -->
@@ -703,9 +769,9 @@
 市民向けFAQを作成してください。</code></pre>
         </div>
 
-        <!-- スライド22: chatgptに議事録ファイルをアップロードして、出力した例 -->
+        <!-- スライド22: ChatGPTに議事録ファイルをアップロードして、出力した例 -->
         <div class="slide">
-            <h1>chatgptに議事録ファイルをアップロードして、出力した例</h1>
+            <h1>ChatGPTに議事録ファイルをアップロードして、出力した例</h1>
             <div class="image-container">
                 <img src="image.png" alt="議事録FAQ作成結果">
             </div>
@@ -752,9 +818,9 @@
 各担当課ごとのTODOリスト</code></pre>
         </div>
 
-        <!-- スライド21: chatgptに議事録ファイルをアップロードして、出力した例 -->
+        <!-- スライド21: ChatGPTに議事録ファイルをアップロードして、出力した例 -->
         <div class="slide">
-            <h1>chatgptに議事録ファイルをアップロードして、出力した例</h1>
+            <h1>ChatGPTに議事録ファイルをアップロードして、出力した例</h1>
             <div class="image-container">
                 <img src="image-1.png" alt="議事録TODO抽出結果">
             </div>
@@ -893,6 +959,90 @@
 
         // 初期化
         showSlide(0);
+
+        // コードブロックにコピーボタンを追加
+        function addCopyButtons() {
+            const preElements = document.querySelectorAll('pre');
+            
+            preElements.forEach((pre, index) => {
+                // すでにコンテナで囲まれていない場合のみ処理
+                if (!pre.parentNode.classList.contains('code-container')) {
+                    // preをcode-containerで囲む
+                    const container = document.createElement('div');
+                    container.className = 'code-container';
+                    pre.parentNode.insertBefore(container, pre);
+                    container.appendChild(pre);
+                    
+                    // コピーボタンを作成
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.innerHTML = '<i class="fas fa-copy"></i> コピー';
+                    copyButton.setAttribute('data-code-index', index);
+                    
+                    // ボタンをコンテナに追加
+                    container.appendChild(copyButton);
+                }
+            });
+        }
+
+        // クリップボードにコピーする機能
+        async function copyToClipboard(text, button) {
+            try {
+                await navigator.clipboard.writeText(text);
+                
+                // ボタンの表示を一時的に変更
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> コピー済み';
+                button.classList.add('copied');
+                
+                // 2秒後に元に戻す
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+                
+            } catch (err) {
+                console.error('クリップボードへのコピーに失敗しました:', err);
+                
+                // フォールバック: 古いブラウザ用
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    button.innerHTML = '<i class="fas fa-check"></i> コピー済み';
+                    button.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-copy"></i> コピー';
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err2) {
+                    console.error('フォールバックコピーも失敗しました:', err2);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // コピーボタンのクリックイベント
+        function setupCopyButtons() {
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.copy-button')) {
+                    e.preventDefault();
+                    const button = e.target.closest('.copy-button');
+                    const container = button.parentNode;
+                    const pre = container.querySelector('pre');
+                    const codeText = pre.textContent || pre.innerText;
+                    
+                    copyToClipboard(codeText, button);
+                }
+            });
+        }
+
+        // コピーボタンの初期化
+        addCopyButtons();
+        setupCopyButtons();
 
         // クリックでのページ送り機能を削除
     </script>
