@@ -309,7 +309,56 @@
 
         /* ナビゲーション（非表示） */
         .nav-controls {
-            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 20px;
+            z-index: 1001;
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #0747A6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 82, 204, 0.3);
+        }
+
+        .nav-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .nav-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .slide-counter {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 16px;
         }
 
         /* プログレスバー - Atlassian Design */
@@ -877,8 +926,15 @@
 
     <!-- ナビゲーションコントロール -->
     <div class="nav-controls">
-        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← 前へ</button>
-        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">次へ →</button>
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+            前へ
+        </button>
+        <div class="slide-counter" id="slideCounter">1 / 24</div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+            次へ
+            <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
 
     <script>
@@ -904,6 +960,12 @@
             // スライド番号更新
             document.getElementById('slideNumber').textContent = 
                 `${currentSlide + 1} / ${totalSlides}`;
+            
+            // ナビゲーションのスライドカウンター更新
+            const slideCounter = document.getElementById('slideCounter');
+            if (slideCounter) {
+                slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            }
 
             // ボタンの有効/無効切り替え
             document.getElementById('prevBtn').disabled = currentSlide === 0;
