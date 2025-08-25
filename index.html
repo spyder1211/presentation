@@ -518,7 +518,7 @@
     </div>
 
     <!-- スライド番号 -->
-    <div class="slide-number" id="slideNumber">1 / 25</div>
+    <div class="slide-number" id="slideNumber">1 / 27</div>
 
     <!-- プレゼンテーションコンテナ -->
     <div class="presentation-container">
@@ -672,7 +672,102 @@
 [ここに「求める出力」を明示、例：レポートを作成してください]</code></pre>
         </div>
 
-        <!-- スライド23: プロンプト自体をChatGPTに作成してもらう -->
+        <!-- スライド8: Markdown形式とは？ -->
+        <div class="slide">
+            <h1>Markdown形式とは？</h1>
+            <h2><i class="fas fa-code"></i> AIが理解しやすい文書構造化フォーマット</h2>
+            
+            <div class="summary-box">
+                <p><strong>Markdown</strong>は、シンプルな記法で文書を構造化できる軽量マークアップ言語です。<br>
+                プレーンテキストで書きながら、見出し・リスト・表などの構造を表現できます。</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3>構造が明確</h3>
+                    <p>AIが文書の階層や要素を<br>正確に解析できる</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-eye"></i></div>
+                    <h3>読みやすい</h3>
+                    <p>人間にも機械にも<br>理解しやすい形式</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-magic"></i></div>
+                    <h3>整形が簡単</h3>
+                    <p>AIの出力を自動的に<br>見やすく整形</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3><i class="fas fa-star"></i> なぜAIと相性が良いのか？</h3>
+                <p>Markdownは<strong>構造と内容が分離</strong>されているため、AIが意図を正確に理解し、<br>
+                整理された形式で情報を出力できます。</p>
+            </div>
+        </div>
+
+        <!-- スライド9: Markdownの基本記法 -->
+        <div class="slide">
+            <h1>Markdownの基本記法</h1>
+            <h2><i class="fas fa-list-ul"></i> プロンプトでよく使う記法例</h2>
+            
+            <div class="comparison">
+                <div class="comparison-item before">
+                    <h3><i class="fas fa-edit"></i> Markdown記法</h3>
+                    <pre><code># 見出し1
+## 見出し2
+### 見出し3
+
+- 箇条書き項目1
+- 箇条書き項目2
+  - ネストも可能
+
+**強調（太字）**
+*イタリック*
+
+| 列1 | 列2 | 列3 |
+|-----|-----|-----|
+| データA | データB | データC |</code></pre>
+                </div>
+                <div class="comparison-item after">
+                    <h3><i class="fas fa-desktop"></i> 表示結果</h3>
+                    <div style="padding: 20px; background: white; border-radius: 8px;">
+                        <h1 style="font-size: 1.8em; margin: 10px 0;">見出し1</h1>
+                        <h2 style="font-size: 1.4em; margin: 10px 0;">見出し2</h2>
+                        <h3 style="font-size: 1.2em; margin: 10px 0;">見出し3</h3>
+                        <ul style="margin: 15px 0;">
+                            <li>箇条書き項目1</li>
+                            <li>箇条書き項目2
+                                <ul><li>ネストも可能</li></ul>
+                            </li>
+                        </ul>
+                        <p><strong>強調（太字）</strong><br>
+                        <em>イタリック</em></p>
+                        <table style="border-collapse: collapse; margin-top: 10px;">
+                            <tr style="background: #f0f0f0;">
+                                <th style="border: 1px solid #ddd; padding: 8px;">列1</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">列2</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">列3</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">データA</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">データB</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">データC</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3><i class="fas fa-lightbulb"></i> プロンプトでの活用方法</h3>
+                <p>「<strong>Markdown形式で出力してください</strong>」と指示するだけで、<br>
+                見出し・箇条書き・表などが整形された、読みやすい出力を得られます。</p>
+            </div>
+        </div>
+
+        <!-- スライド10: プロンプト自体をChatGPTに作成してもらう -->
         <div class="slide">
             <h1>プロンプト自体をChatGPTに作成してもらう</h1>
             <pre><code>地方自治体の職員としてメールを返信したいです。 
@@ -1015,7 +1110,7 @@
             <i class="fas fa-chevron-left"></i>
             前へ
         </button>
-        <div class="slide-counter" id="slideCounter">1 / 25</div>
+        <div class="slide-counter" id="slideCounter">1 / 27</div>
         <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
             次へ
             <i class="fas fa-chevron-right"></i>
