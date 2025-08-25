@@ -80,8 +80,8 @@
             display: flex !important;
             flex-direction: column;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: var(--white);
+            background: var(--white);
+            color: var(--text-color);
         }
 
         .title-slide h1 {
@@ -89,14 +89,23 @@
             margin-bottom: 30px;
             font-weight: 700;
             letter-spacing: 2px;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            color: var(--primary-color);
+            line-height: 1.3;
         }
 
         .title-slide .subtitle {
             font-size: 1.6em;
             margin-bottom: 40px;
-            opacity: 0.9;
-            font-weight: 300;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .title-slide .divider {
+            width: 120px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 40px auto;
+            border-radius: 2px;
         }
 
         .title-slide .date {
@@ -526,6 +535,8 @@
         <!-- スライド1: タイトル -->
         <div class="slide active title-slide">
             <h1>生成AIプロンプト活用で<br>業務効率化を実現</h1>
+            <div class="divider"></div>
+            <p class="subtitle">自治体業務における実践的プロンプトエンジニアリング</p>
         </div>
 
         <!-- スライド2: プロンプトとは？ -->
@@ -842,9 +853,9 @@
 山田</code></pre>
         </div>
 
-        <!-- スライド23: 返信文面作成プロンプト1 -->
+        <!-- スライド14: シンプルプロンプトの例 -->
         <div class="slide">
-            <h1>返信文面作成プロンプト1</h1>
+            <h1>シンプルプロンプトの例</h1>
             <pre><code>このメールの返信を作成してください。
 
 お疲れさまです。
@@ -854,9 +865,9 @@
 山田</code></pre>
         </div>
 
-        <!-- スライド24: ChatGPT出力例1 -->
+        <!-- スライド15: シンプルプロンプトの出力例 -->
         <div class="slide">
-            <h1>ChatGPT出力例1</h1>
+            <h1>シンプルプロンプトの出力例</h1>
             <pre><code>山田様
 
 お疲れさまです。
@@ -884,9 +895,9 @@
 [所属や連絡先など]</code></pre>
         </div>
 
-        <!-- スライド21: 返信文面作成プロンプト2 -->
+        <!-- スライド16: 構造化プロンプトの例 -->
         <div class="slide">
-            <h1>返信文面作成プロンプト2</h1>
+            <h1>構造化プロンプトの例</h1>
             <pre><code>あなたは地方自治体の職員です。  
 市民から届いたメールに対して、誠実かつ丁寧で、公的機関らしい返信文を作成してください。  
 
@@ -910,9 +921,9 @@
 本文： …（敬語での返信文）…</code></pre>
         </div>
 
-        <!-- スライド22: ChatGPT出力例2 -->
+        <!-- スライド17: 構造化プロンプトの出力例 -->
         <div class="slide">
-            <h1>ChatGPT出力例2</h1>
+            <h1>構造化プロンプトの出力例</h1>
             <pre><code>件名：夏祭り屋台出店について
 
 本文：
