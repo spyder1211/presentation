@@ -315,6 +315,28 @@
             margin-top: 0;
         }
 
+        /* プロンプト例と出力例のスタイル */
+        .prompt-example, .output-example {
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .prompt-example h3, .output-example h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .prompt-example pre, .output-example pre {
+            background: var(--white);
+            border: 2px solid var(--neutral);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
         /* 画像 */
         img {
             max-width: 100%;
@@ -527,7 +549,7 @@
     </div>
 
     <!-- スライド番号 -->
-    <div class="slide-number" id="slideNumber">1 / 27</div>
+    <div class="slide-number" id="slideNumber">1 / 30</div>
 
     <!-- プレゼンテーションコンテナ -->
     <div class="presentation-container">
@@ -778,7 +800,88 @@
             </div>
         </div>
 
-        <!-- スライド10: プロンプト自体をChatGPTに作成してもらう -->
+        <!-- スライド10: ChatGPTへのMarkdown指定プロンプト -->
+        <div class="slide">
+            <h1>ChatGPTへのMarkdown指定プロンプト</h1>
+            <h2><i class="fas fa-terminal"></i> 構造化された出力を得るための指示方法</h2>
+            
+            <div class="prompt-example">
+                <h3><i class="fas fa-pen"></i> プロンプト例</h3>
+                <pre><code>都留市の観光名所を3つ紹介してください。
+以下の形式でMarkdown形式で出力してください：
+
+## 名称
+**概要**: 50文字程度で説明
+### おすすめポイント
+- ポイント1
+- ポイント2
+- ポイント3</code></pre>
+            </div>
+            
+            <div class="highlight-box">
+                <h3><i class="fas fa-check-circle"></i> 効果的な指定のポイント</h3>
+                <ul style="text-align: left; margin: 10px 20px;">
+                    <li><strong>「Markdown形式で」</strong>と明示的に指定</li>
+                    <li>出力形式の<strong>具体例を提示</strong></li>
+                    <li>階層構造（##、###）を使って<strong>情報を整理</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド11: ChatGPTのMarkdown出力例 -->
+        <div class="slide">
+            <h1>ChatGPTのMarkdown出力例</h1>
+            <h2><i class="fas fa-file-alt"></i> 実際のAI出力結果</h2>
+            
+            <div class="output-example">
+                <h3><i class="fas fa-code"></i> Markdown形式の出力</h3>
+                <pre style="font-size: 0.85em; max-height: 300px; overflow-y: auto;"><code># 都留市の観光名所
+
+## 1. リニア見学センター
+**概要**: リニアモーターカーの仕組みや開発の歴史を学べる体験型施設
+
+### おすすめポイント
+- 実物のリニア車両を間近で見学可能
+- 時速500kmの世界を体験できるシミュレーター
+- 子供から大人まで楽しめる体験型展示
+
+## 2. 勝山城跡
+**概要**: 戦国時代の山城跡で、富士山の絶景が楽しめるスポット
+
+### おすすめポイント
+- 富士山と都留市街を一望できる展望台
+- 春は桜、秋は紅葉の名所
+- ハイキングコースとしても人気
+
+## 3. 都留市商家資料館
+**概要**: 江戸時代の商家を復元した歴史資料館
+
+### おすすめポイント
+- 当時の生活用品や商売道具を展示
+- 定期的に伝統工芸のワークショップを開催
+- 都留の歴史と文化を学べる</code></pre>
+            </div>
+            
+            <div class="feature-grid" style="margin-top: 30px;">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-check"></i></div>
+                    <h3>階層構造が明確</h3>
+                    <p>見出しレベルで<br>情報を整理</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-copy"></i></div>
+                    <h3>再利用が簡単</h3>
+                    <p>そのまま文書に<br>コピー＆ペースト</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>他ツールへ転用</h3>
+                    <p>Word、Notion等へ<br>簡単に移行</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- スライド12: プロンプト自体をChatGPTに作成してもらう -->
         <div class="slide">
             <h1>プロンプト自体をChatGPTに作成してもらう</h1>
             <pre><code>地方自治体の職員としてメールを返信したいです。 
@@ -1113,6 +1216,65 @@
             </div>
         </div>
 
+        <!-- スライド30: ChatGPT Thinking modeの活用 -->
+        <div class="slide">
+            <h1>ChatGPT Thinking modeの活用</h1>
+            <h2><i class="fas fa-brain"></i> より深い分析と精度の高い回答を得る方法</h2>
+            
+            <div class="summary-box">
+                <h3><i class="fas fa-info-circle"></i> Thinking modeとは</h3>
+                <p>複雑な問題を<strong>時間をかけて深く考える</strong>新機能。<br>
+                従来より詳細で正確な分析を提供します。<br>
+                <span style="color: var(--success); font-weight: bold;">無料版でも1日1回利用可能！</span></p>
+            </div>
+            
+            <div class="prompt-example">
+                <h3><i class="fas fa-terminal"></i> プロンプトでの指定方法</h3>
+                <pre><code>[質問や依頼内容をここに記載]
+
+しっかり考えて回答してください</code></pre>
+                <p style="margin-top: 15px;"><strong>その他の指定例：</strong></p>
+                <ul style="text-align: left; margin-left: 20px;">
+                    <li>「よく考えてから答えてください」</li>
+                    <li>「COTで考えてください」（Chain of Thought）</li>
+                    <li>「深く分析してから回答してください」</li>
+                </ul>
+            </div>
+            
+            <div class="feature-grid" style="margin-top: 30px;">
+                <div class="card primary" style="padding: 15px;">
+                    <div class="feature-icon">📄</div>
+                    <h4>高精度な提案書作成</h4>
+                    <p style="font-size: 0.9em;">複雑な要件を整理した提案書</p>
+                </div>
+                <div class="card success" style="padding: 15px;">
+                    <div class="feature-icon">📚</div>
+                    <h4>研修・教育資料の開発</h4>
+                    <p style="font-size: 0.9em;">体系的な学習コンテンツ</p>
+                </div>
+                <div class="card warning" style="padding: 15px;">
+                    <div class="feature-icon">💼</div>
+                    <h4>複雑な業務分析</h4>
+                    <p style="font-size: 0.9em;">多角的な視点での検討</p>
+                </div>
+                <div class="card error" style="padding: 15px;">
+                    <div class="feature-icon">🔍</div>
+                    <h4>重要な意思決定支援</h4>
+                    <p style="font-size: 0.9em;">リスクと機会の詳細分析</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box" style="margin-top: 25px;">
+                <h3><i class="fas fa-check-circle"></i> ポイント</h3>
+                <ul style="text-align: left; margin: 10px 20px;">
+                    <li>✅ 無料版でも<strong>1日1回</strong>利用可能</li>
+                    <li>✅ 複雑な課題や重要な判断が必要な場面で活用</li>
+                    <li>✅ プロンプトの最後に<strong>「しっかり考えて」</strong>を追加するだけ</li>
+                    <li>⚠️ 通常より回答時間がかかるが、品質は大幅に向上</li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 
     <!-- ナビゲーションコントロール -->
@@ -1121,7 +1283,7 @@
             <i class="fas fa-chevron-left"></i>
             前へ
         </button>
-        <div class="slide-counter" id="slideCounter">1 / 27</div>
+        <div class="slide-counter" id="slideCounter">1 / 30</div>
         <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
             次へ
             <i class="fas fa-chevron-right"></i>
