@@ -549,7 +549,7 @@
     </div>
 
     <!-- スライド番号 -->
-    <div class="slide-number" id="slideNumber">1 / 30</div>
+    <div class="slide-number" id="slideNumber">1 / 31</div>
 
     <!-- プレゼンテーションコンテナ -->
     <div class="presentation-container">
@@ -885,7 +885,78 @@
             </div>
         </div>
 
-        <!-- スライド12: プロンプト自体をChatGPTに作成してもらう -->
+        <!-- スライド12: 音声デモ - インタビューワーAI体験 -->
+        <div class="slide">
+            <h1>音声デモ - インタビューワーAI体験</h1>
+            <h2><i class="fas fa-microphone"></i> 都留市の観光情報を元にした対話型デモンストレーション</h2>
+            
+            <div class="prompt-example" style="margin-top: 25px;">
+                <h3><i class="fas fa-script"></i> 使用するプロンプト</h3>
+                <pre style="font-size: 0.8em; max-height: 400px; overflow-y: auto;"><code>あなたは観光番組のインタビューワーです。
+以下の都留市の観光情報を元に、私（ゲスト）に対して
+自然な会話でインタビューしてください。
+
+【都留市の観光情報】
+## 1. リニア見学センター
+**概要**: リニアモーターカーの仕組みや開発の歴史を学べる体験型施設
+### おすすめポイント
+- 実物のリニア車両を間近で見学可能
+- 時速500kmの世界を体験できるシミュレーター
+- 子供から大人まで楽しめる体験型展示
+
+## 2. 勝山城跡
+**概要**: 戦国時代の山城跡で、富士山の絶景が楽しめるスポット
+### おすすめポイント
+- 富士山と都留市街を一望できる展望台
+- 春は桜、秋は紅葉の名所
+- ハイキングコースとしても人気
+
+## 3. 都留市商家資料館
+**概要**: 江戸時代の商家を復元した歴史資料館
+### おすすめポイント
+- 当時の生活用品や商売道具を展示
+- 定期的に伝統工芸のワークショップを開催
+- 都留の歴史と文化を学べる
+
+【インタビュー条件】
+- 1つ目の質問から始めてください
+- 私の回答に応じて自然に会話を続けてください
+- 都留市の魅力を引き出すような質問をしてください
+- 親しみやすく、でも情報番組らしいトーンで
+- 私が「インタビューを開始してください」と言ったら、質問を始めてください
+
+では、インタビュー開始の合図を待ってください。</code></pre>
+            </div>
+            
+            <div class="feature-grid" style="margin-top: 25px;">
+                <div class="card success" style="padding: 15px;">
+                    <div class="feature-icon">🎬</div>
+                    <h4>リアルな対話体験</h4>
+                    <p style="font-size: 0.9em;">AIが自然な質問で会話をリード</p>
+                </div>
+                <div class="card primary" style="padding: 15px;">
+                    <div class="feature-icon">📊</div>
+                    <h4>データ活用の実例</h4>
+                    <p style="font-size: 0.9em;">スライド11の情報を元にした応用</p>
+                </div>
+                <div class="card warning" style="padding: 15px;">
+                    <div class="feature-icon">🎤</div>
+                    <h4>音声対話</h4>
+                    <p style="font-size: 0.9em;">実際の音声でのやり取りを体験</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box" style="margin-top: 20px;">
+                <h3><i class="fas fa-lightbulb"></i> 期待される展開例</h3>
+                <ul style="text-align: left; margin: 10px 20px; font-size: 0.95em;">
+                    <li>「都留市に行かれたことはありますか？」</li>
+                    <li>「この中で一番興味があるのはどちらですか？」</li>
+                    <li>「リニアの時速500kmって実際どう思われます？」</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- スライド13: プロンプト自体をChatGPTに作成してもらう -->
         <div class="slide">
             <h1>プロンプト自体をChatGPTに作成してもらう</h1>
             <pre><code>地方自治体の職員としてメールを返信したいです。 
@@ -1287,7 +1358,7 @@
             <i class="fas fa-chevron-left"></i>
             前へ
         </button>
-        <div class="slide-counter" id="slideCounter">1 / 30</div>
+        <div class="slide-counter" id="slideCounter">1 / 31</div>
         <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
             次へ
             <i class="fas fa-chevron-right"></i>
